@@ -1,0 +1,22 @@
+# Production deployment without GPU requirements
+services:
+  space-debris-tracker:
+    build:
+      context: .
+      dockerfile: Dockerfile.cpu
+    ports:
+      - "5000:5000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CUDA_VISIBLE_DEVICES=-1  # Force CPU usage
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    restart: unless-stopped
+    # Remove GPU-specific configurations for cloud deployment
+    
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
