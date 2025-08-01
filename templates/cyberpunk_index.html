@@ -463,38 +463,527 @@
             100% { transform: translateX(100%); }
         }
 
-        /* Process Steps - Zigzag Layout */
-        .process-flex {
+        /* Process Flow Container - Vertical Zigzag Layout */
+        .process-flow-container {
+            position: relative;
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 4rem 2rem;
+            min-height: 2000px;
             display: flex;
             flex-direction: column;
-            gap: 2rem;
-            margin-bottom: 3rem;
-            padding: 0 2rem;
+            align-items: center;
         }
 
-        .process-step {
-            background: rgba(22, 33, 62, 0.8);
-            border: 1px solid rgba(0,255,255,0.3);
-            border-radius: 10px;
-            padding: 2rem;
+        /* Zigzag Row Containers */
+        .zigzag-row {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin: 3rem 0;
             position: relative;
-            transition: all 0.3s ease;
+            min-height: 320px;
+        }
+        
+        .zigzag-row.left-aligned {
+            justify-content: flex-start;
+        }
+        
+        .zigzag-row.right-aligned {
+            justify-content: flex-end;
+        }
+
+        /* Process Steps - Zigzag Cards */
+        .process-step {
+            background: rgba(22, 33, 62, 0.95);
+            border: 2px solid rgba(0,255,255,0.4);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.4s ease;
             cursor: pointer;
-            overflow: hidden;
-            width: 60%;
-            min-height: 200px;
+            overflow: visible;
+            width: 350px;
+            min-height: 250px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0,255,255,0.15);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .zigzag-row.left-aligned .process-step {
+            margin-left: 5rem;
+        }
+        
+        .zigzag-row.right-aligned .process-step {
+            margin-right: 5rem;
         }
 
-        .process-step:nth-child(odd) {
-            align-self: flex-start;
-            margin-left: 0;
-            margin-right: auto;
+        /* Detail Containers - Side Info Panels */
+        .detail-container {
+            background: rgba(16, 21, 46, 0.9);
+            border: 2px solid rgba(139, 0, 255, 0.5);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 400px;
+            min-height: 280px;
+            backdrop-filter: blur(15px);
+            box-shadow: 
+                0 0 30px rgba(139, 0, 255, 0.2),
+                inset 0 1px 0 rgba(139, 0, 255, 0.1);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+            z-index: 5;
+        }
+        
+        .detail-container.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .detail-container.left {
+            right: calc(100% - 50px);
+        }
+        
+        .detail-container.right {
+            left: calc(100% - 50px);
         }
 
-        .process-step:nth-child(even) {
-            align-self: flex-end;
-            margin-left: auto;
-            margin-right: 0;
+        .detail-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 10px 50px rgba(139, 0, 255, 0.3),
+                inset 0 1px 0 rgba(139, 0, 255, 0.2);
+        }
+
+        /* Zigzag Connection Arrows */
+        .zigzag-arrow {
+            position: absolute;
+            z-index: 8;
+        }
+        
+        .zigzag-arrow svg {
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .zigzag-arrow path {
+            stroke: var(--neon-cyan);
+            stroke-width: 3;
+            fill: none;
+            animation: arrow-flow 3s ease-in-out infinite;
+        }
+        
+        .zigzag-arrow polygon {
+            fill: var(--neon-cyan);
+            animation: arrow-glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes arrow-flow {
+            0%, 100% { 
+                opacity: 0.6;
+                stroke-dasharray: 10, 5;
+                stroke-dashoffset: 0;
+            }
+            50% { 
+                opacity: 1;
+                stroke-dashoffset: 15;
+            }
+        }
+
+        /* Central Spine Connection */
+        .central-spine {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, 
+                transparent 0%,
+                rgba(0, 255, 255, 0.3) 10%, 
+                rgba(0, 255, 255, 0.8) 50%, 
+                rgba(0, 255, 255, 0.3) 90%,
+                transparent 100%);
+            transform: translateX(-50%);
+            z-index: 1;
+            animation: spine-pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes spine-pulse {
+            0%, 100% { 
+                opacity: 0.4;
+                box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+            }
+            50% { 
+                opacity: 1;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            }
+        }
+
+        /* Detail Container Headers */
+        .detail-header {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.4rem;
+            color: var(--neon-purple);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(139, 0, 255, 0.5);
+            border-bottom: 1px solid rgba(139, 0, 255, 0.3);
+            padding-bottom: 1rem;
+        }
+
+        .detail-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .detail-content h4 {
+            color: var(--neon-cyan);
+            margin: 1rem 0 0.5rem 0;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .detail-content ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .detail-content li {
+            margin: 0.3rem 0;
+            color: var(--text-secondary);
+        }
+
+        /* Central Data Flow Hub */
+        .central-hub {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0,255,255,0.1) 0%, rgba(139,0,255,0.1) 50%, transparent 100%);
+            border: 2px solid rgba(0,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            animation: central-pulse 3s ease-in-out infinite;
+        }
+
+        .central-hub-icon {
+            font-size: 3rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px currentColor;
+            margin-bottom: 0.5rem;
+        }
+
+        .central-hub-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes central-pulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                border-color: rgba(0,255,255,0.3);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.05);
+                border-color: rgba(0,255,255,0.8);
+            }
+        }
+
+        /* Animated Flow Arrows */
+        .flow-arrow {
+            position: absolute;
+            z-index: 10;
+        }
+
+        .flow-arrow svg {
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        /* Arrow 1: From Step 1 to Center */
+        .arrow-1-to-center {
+            top: 120px;
+            left: 320px;
+            width: 200px;
+            height: 100px;
+        }
+
+        /* Arrow 2: From Step 2 to Center */
+        .arrow-2-to-center {
+            top: 120px;
+            right: 320px;
+            width: 200px;
+            height: 100px;
+            transform: scaleX(-1);
+        }
+
+        /* Arrow 3: From Center to Step 3 */
+        .arrow-center-to-3 {
+            bottom: 120px;
+            left: 320px;
+            width: 200px;
+            height: 100px;
+            transform: scaleY(-1);
+        }
+
+        /* Arrow 4: From Center to Step 4 */
+        .arrow-center-to-4 {
+            bottom: 120px;
+            right: 320px;
+            width: 200px;
+            height: 100px;
+            transform: scale(-1, -1);
+        }
+
+        /* Arrow Animation */
+        .arrow-animated {
+            animation: arrow-flow 2s ease-in-out infinite;
+        }
+
+        .arrow-glow {
+            animation: arrow-glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes arrow-flow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes arrow-glow {
+            0% { 
+                filter: drop-shadow(0 0 5px currentColor);
+                color: var(--neon-cyan);
+            }
+            100% { 
+                filter: drop-shadow(0 0 20px currentColor);
+                color: var(--neon-purple);
+            }
+        }
+
+        /* Data Flow Particles */
+        .data-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .particle-1 {
+            animation: particle-flow-1 4s linear infinite;
+        }
+
+        .particle-2 {
+            animation: particle-flow-2 4s linear infinite;
+            animation-delay: -1s;
+        }
+
+        .particle-3 {
+            animation: particle-flow-3 4s linear infinite;
+            animation-delay: -2s;
+        }
+
+        .particle-4 {
+            animation: particle-flow-4 4s linear infinite;
+            animation-delay: -3s;
+        }
+
+        @keyframes particle-flow-1 {
+            0% { top: 150px; left: 330px; opacity: 0; }
+            25% { opacity: 1; }
+            50% { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+            75% { opacity: 1; }
+            100% { bottom: 150px; left: 330px; opacity: 0; }
+        }
+
+        @keyframes particle-flow-2 {
+            0% { top: 150px; right: 330px; opacity: 0; }
+            25% { opacity: 1; }
+            50% { top: 50%; right: 50%; transform: translate(50%, -50%); }
+            75% { opacity: 1; }
+            100% { bottom: 150px; right: 330px; opacity: 0; }
+        }
+
+        @keyframes particle-flow-3 {
+            0% { top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0; }
+            25% { opacity: 1; }
+            100% { bottom: 150px; left: 330px; opacity: 0; }
+        }
+
+        @keyframes particle-flow-4 {
+            0% { top: 50%; right: 50%; transform: translate(50%, -50%); opacity: 0; }
+            25% { opacity: 1; }
+            100% { bottom: 150px; right: 330px; opacity: 0; }
+        }
+
+        /* Wireframe Connection Lines */
+        .connection-line {
+            position: absolute;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(0,255,255,0.3) 25%, 
+                rgba(0,255,255,0.6) 50%, 
+                rgba(0,255,255,0.3) 75%, 
+                transparent 100%);
+            animation: line-pulse 3s ease-in-out infinite;
+            z-index: 5;
+        }
+
+        /* Horizontal Lines */
+        .line-horizontal {
+            height: 2px;
+        }
+
+        /* Vertical Lines */
+        .line-vertical {
+            width: 2px;
+            background: linear-gradient(0deg, 
+                transparent 0%, 
+                rgba(0,255,255,0.3) 25%, 
+                rgba(0,255,255,0.6) 50%, 
+                rgba(0,255,255,0.3) 75%, 
+                transparent 100%);
+        }
+
+        /* Top horizontal line connecting Step 1 to Step 2 */
+        .line-top {
+            top: 125px;
+            left: 320px;
+            right: 320px;
+        }
+
+        /* Left vertical line from Step 1 down */
+        .line-left-down {
+            top: 250px;
+            left: 160px;
+            height: 400px;
+        }
+
+        /* Right vertical line from Step 2 down */
+        .line-right-down {
+            top: 250px;
+            right: 160px;
+            height: 400px;
+        }
+
+        /* Bottom horizontal line connecting Step 3 to center */
+        .line-bottom-left {
+            bottom: 125px;
+            left: 320px;
+            width: 220px;
+        }
+
+        /* Bottom horizontal line connecting center to Step 4 */
+        .line-bottom-right {
+            bottom: 125px;
+            right: 320px;
+            width: 220px;
+        }
+
+        /* Center connecting lines */
+        .line-center-horizontal {
+            top: 50%;
+            left: 540px;
+            right: 540px;
+            margin-top: -1px;
+        }
+
+        .line-center-vertical {
+            left: 50%;
+            top: 300px;
+            bottom: 300px;
+            margin-left: -1px;
+        }
+
+        @keyframes line-pulse {
+            0%, 100% { 
+                opacity: 0.4; 
+                box-shadow: 0 0 2px rgba(0,255,255,0.3);
+            }
+            50% { 
+                opacity: 0.8; 
+                box-shadow: 0 0 8px rgba(0,255,255,0.6);
+            }
+        }
+
+        /* Corner connectors */
+        .corner-connector {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border: 2px solid rgba(0,255,255,0.6);
+            background: rgba(0,255,255,0.2);
+            border-radius: 50%;
+            animation: corner-pulse 2s ease-in-out infinite;
+        }
+
+        .corner-top-left {
+            top: 250px;
+            left: 156px;
+        }
+
+        .corner-top-right {
+            top: 250px;
+            right: 156px;
+        }
+
+        .corner-bottom-left {
+            bottom: 125px;
+            left: 536px;
+        }
+
+        .corner-bottom-right {
+            bottom: 125px;
+            right: 536px;
+        }
+
+        @keyframes corner-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 5px rgba(0,255,255,0.4);
+            }
+            50% { 
+                transform: scale(1.2);
+                box-shadow: 0 0 15px rgba(0,255,255,0.8);
+            }
+        }
+
+        /* Active Step Highlighting */
+        .process-step.active {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 30px rgba(0,255,65,0.4);
+            transform: scale(1.05);
+        }
+
+        .process-step.completed {
+            border-color: var(--neon-purple);
+            background: rgba(139, 0, 255, 0.1);
+        }
+
+        .process-step.processing {
+            border-color: var(--neon-orange);
+            animation: processing-glow 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes processing-glow {
+            0% { box-shadow: 0 0 20px rgba(255,149,0,0.3); }
+            100% { box-shadow: 0 0 40px rgba(255,149,0,0.8); }
         }
 
         .process-step:hover {
@@ -547,6 +1036,67 @@
             max-height: 300px;
             opacity: 1;
             margin-top: 1rem;
+        }
+
+        /* Step Guidance Styles */
+        .step-guidance {
+            position: absolute;
+            bottom: -5px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 0.8rem;
+            font-size: 0.8rem;
+            backdrop-filter: blur(5px);
+            animation: guidance-glow 2s ease-in-out infinite alternate;
+        }
+
+        .guidance-status {
+            color: var(--neon-green);
+            font-weight: bold;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .guidance-message {
+            color: var(--text-secondary);
+            line-height: 1.3;
+        }
+
+        @keyframes guidance-glow {
+            0% {
+                border-color: rgba(0, 255, 255, 0.3);
+                box-shadow: 0 0 5px rgba(0, 255, 255, 0.2);
+            }
+            100% {
+                border-color: rgba(0, 255, 255, 0.6);
+                box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+            }
+        }
+
+        /* Enhanced step hover effects */
+        .process-step.active .step-guidance {
+            border-color: rgba(0, 255, 65, 0.5);
+            background: rgba(0, 255, 65, 0.1);
+        }
+
+        .process-step.active .guidance-status {
+            color: var(--neon-green);
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        .process-step.completed .step-guidance {
+            border-color: rgba(139, 0, 255, 0.5);
+            background: rgba(139, 0, 255, 0.1);
+        }
+
+        .process-step.completed .guidance-status {
+            color: var(--neon-purple);
         }
 
         .toggle-btn {
@@ -1089,10 +1639,10 @@
             </div>
         </div>
 
-        <!-- Process Steps Grid -->
-    <div class="process-flex">
-            <!-- Step 1: Data Acquisition -->
-            <div class="process-step" onclick="toggleDescription(1)">
+        <!-- Process Flow Container with Animated Arrows -->
+        <div class="process-flow-container">
+            <!-- Step 1: Data Acquisition - Top Left -->
+            <div class="process-step step-1" onclick="toggleDescription(1)">
                 <div class="step-number">1</div>
                 <div class="step-icon">
                     <i class="fas fa-download"></i>
@@ -1114,8 +1664,8 @@
                 </div>
             </div>
 
-            <!-- Step 2: Data Processing -->
-            <div class="process-step" onclick="toggleDescription(2)">
+            <!-- Step 2: Data Processing - Top Right -->
+            <div class="process-step step-2" onclick="toggleDescription(2)">
                 <div class="step-number">2</div>
                 <div class="step-icon">
                     <i class="fas fa-microchip"></i>
@@ -1137,8 +1687,8 @@
                 </div>
             </div>
 
-            <!-- Step 3: Neural Network Training -->
-            <div class="process-step" onclick="toggleDescription(3)">
+            <!-- Step 3: Neural Network Training - Bottom Left -->
+            <div class="process-step step-3" onclick="toggleDescription(3)">
                 <div class="step-number">3</div>
                 <div class="step-icon">
                     <i class="fas fa-brain"></i>
@@ -1164,8 +1714,8 @@
                 </div>
             </div>
 
-            <!-- Step 4: Threat Analysis -->
-            <div class="process-step" onclick="toggleDescription(4)">
+            <!-- Step 4: Threat Analysis - Bottom Right -->
+            <div class="process-step step-4" onclick="toggleDescription(4)">
                 <div class="step-number">4</div>
                 <div class="step-icon">
                     <i class="fas fa-shield-alt"></i>
@@ -1186,6 +1736,101 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Central Data Flow Hub -->
+            <div class="central-hub">
+                <div class="central-hub-icon">
+                    <i class="fas fa-satellite"></i>
+                </div>
+                <div class="central-hub-text">
+                    Data Flow<br>Hub
+                </div>
+            </div>
+
+            <!-- Animated Flow Arrows -->
+            <div class="flow-arrow arrow-1-to-center arrow-animated arrow-glow">
+                <svg width="200" height="100" viewBox="0 0 200 100">
+                    <defs>
+                        <marker id="arrowhead1" markerWidth="10" markerHeight="7" 
+                         refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="currentColor" />
+                        </marker>
+                    </defs>
+                    <path d="M 20 20 Q 100 10 180 50" stroke="currentColor" stroke-width="2" 
+                          fill="none" marker-end="url(#arrowhead1)" />
+                </svg>
+            </div>
+
+            <div class="flow-arrow arrow-2-to-center arrow-animated arrow-glow">
+                <svg width="200" height="100" viewBox="0 0 200 100">
+                    <defs>
+                        <marker id="arrowhead2" markerWidth="10" markerHeight="7" 
+                         refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="currentColor" />
+                        </marker>
+                    </defs>
+                    <path d="M 20 20 Q 100 10 180 50" stroke="currentColor" stroke-width="2" 
+                          fill="none" marker-end="url(#arrowhead2)" />
+                </svg>
+            </div>
+
+            <div class="flow-arrow arrow-center-to-3 arrow-animated arrow-glow">
+                <svg width="200" height="100" viewBox="0 0 200 100">
+                    <defs>
+                        <marker id="arrowhead3" markerWidth="10" markerHeight="7" 
+                         refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="currentColor" />
+                        </marker>
+                    </defs>
+                    <path d="M 20 20 Q 100 10 180 50" stroke="currentColor" stroke-width="2" 
+                          fill="none" marker-end="url(#arrowhead3)" />
+                </svg>
+            </div>
+
+            <div class="flow-arrow arrow-center-to-4 arrow-animated arrow-glow">
+                <svg width="200" height="100" viewBox="0 0 200 100">
+                    <defs>
+                        <marker id="arrowhead4" markerWidth="10" markerHeight="7" 
+                         refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="currentColor" />
+                        </marker>
+                    </defs>
+                    <path d="M 20 20 Q 100 10 180 50" stroke="currentColor" stroke-width="2" 
+                          fill="none" marker-end="url(#arrowhead4)" />
+                </svg>
+            </div>
+
+            <!-- Data Flow Particles -->
+            <div class="data-particle particle-1"></div>
+            <div class="data-particle particle-2"></div>
+            <div class="data-particle particle-3"></div>
+            <div class="data-particle particle-4"></div>
+
+            <!-- Wireframe Connection Lines -->
+            <!-- Top horizontal line connecting Step 1 to Step 2 -->
+            <div class="connection-line line-horizontal line-top"></div>
+            
+            <!-- Left vertical line from Step 1 down -->
+            <div class="connection-line line-vertical line-left-down"></div>
+            
+            <!-- Right vertical line from Step 2 down -->
+            <div class="connection-line line-vertical line-right-down"></div>
+            
+            <!-- Center horizontal line -->
+            <div class="connection-line line-horizontal line-center-horizontal"></div>
+            
+            <!-- Center vertical line -->
+            <div class="connection-line line-vertical line-center-vertical"></div>
+            
+            <!-- Bottom horizontal lines -->
+            <div class="connection-line line-horizontal line-bottom-left"></div>
+            <div class="connection-line line-horizontal line-bottom-right"></div>
+            
+            <!-- Corner connectors -->
+            <div class="corner-connector corner-top-left"></div>
+            <div class="corner-connector corner-top-right"></div>
+            <div class="corner-connector corner-bottom-left"></div>
+            <div class="corner-connector corner-bottom-right"></div>
         </div>
 
         <!-- Live Terminal -->
@@ -1236,13 +1881,151 @@
     <script>
         let logCounter = 0;
         let currentStep = 0;
+        let processState = {
+            dataAcquired: false,
+            dataProcessed: false,
+            modelTrained: false,
+            threatsAnalyzed: false
+        };
         
         // Initialize the system
         document.addEventListener('DOMContentLoaded', function() {
             updateSystemStatus();
             startStatusPolling();
-            addLog('System initialization complete', 'success');
+            addLog('🛰️ ORBITAL NEXUS System initialized', 'success');
+            addLog('🤖 Process guidance AI online', 'info');
+            provideInitialGuidance();
+            updateProcessFlow();
         });
+
+        // Provide initial guidance to user
+        function provideInitialGuidance() {
+            addLog('📋 GUIDANCE: Start with Step 1 - Data Acquisition', 'info');
+            addLog('💡 TIP: Click "Details" on any card to see more information', 'info');
+            highlightNextStep();
+        }
+
+        // Highlight the next recommended step
+        function highlightNextStep() {
+            // Remove existing highlights
+            document.querySelectorAll('.process-step').forEach(step => {
+                step.classList.remove('active', 'completed', 'processing');
+            });
+
+            if (!processState.dataAcquired) {
+                document.querySelector('.step-1').classList.add('active');
+                addGuidanceToStep(1, 'READY TO START', 'Click "INITIATE DOWNLOAD" to begin data acquisition');
+            } else if (!processState.dataProcessed) {
+                document.querySelector('.step-1').classList.add('completed');
+                document.querySelector('.step-2').classList.add('active');
+                addGuidanceToStep(2, 'DATA READY', 'Process the downloaded TLE data');
+            } else if (!processState.modelTrained) {
+                document.querySelector('.step-1').classList.add('completed');
+                document.querySelector('.step-2').classList.add('completed');
+                document.querySelector('.step-3').classList.add('active');
+                addGuidanceToStep(3, 'READY FOR TRAINING', 'Train the neural network model');
+            } else if (!processState.threatsAnalyzed) {
+                document.querySelector('.step-1').classList.add('completed');
+                document.querySelector('.step-2').classList.add('completed');
+                document.querySelector('.step-3').classList.add('completed');
+                document.querySelector('.step-4').classList.add('active');
+                addGuidanceToStep(4, 'MODEL READY', 'Analyze threats using trained model');
+            } else {
+                document.querySelectorAll('.process-step').forEach(step => {
+                    step.classList.add('completed');
+                });
+                addLog('✅ COMPLETE: All pipeline stages finished successfully!', 'success');
+            }
+        }
+
+        // Add guidance message to specific step
+        function addGuidanceToStep(stepNum, status, message) {
+            const stepElement = document.querySelector(`.step-${stepNum}`);
+            let guidanceElement = stepElement.querySelector('.step-guidance');
+            
+            if (!guidanceElement) {
+                guidanceElement = document.createElement('div');
+                guidanceElement.className = 'step-guidance';
+                stepElement.appendChild(guidanceElement);
+            }
+            
+            guidanceElement.innerHTML = `
+                <div class="guidance-status">${status}</div>
+                <div class="guidance-message">${message}</div>
+            `;
+        }
+
+        // Update process flow visualization
+        function updateProcessFlow() {
+            const steps = ['dataAcquired', 'dataProcessed', 'modelTrained', 'threatsAnalyzed'];
+            let completedSteps = 0;
+            
+            steps.forEach(step => {
+                if (processState[step]) completedSteps++;
+            });
+            
+            const progress = (completedSteps / steps.length) * 100;
+            updateCentralHub(progress, completedSteps);
+        }
+
+        // Update central hub based on progress
+        function updateCentralHub(progress, completedSteps) {
+            const hubText = document.querySelector('.central-hub-text');
+            const hubIcon = document.querySelector('.central-hub-icon i');
+            
+            if (completedSteps === 0) {
+                hubText.innerHTML = 'Data Flow<br>Hub<br><small>Ready</small>';
+                hubIcon.className = 'fas fa-satellite';
+            } else if (completedSteps === 1) {
+                hubText.innerHTML = 'Processing<br>Data<br><small>25%</small>';
+                hubIcon.className = 'fas fa-download';
+            } else if (completedSteps === 2) {
+                hubText.innerHTML = 'Training<br>Model<br><small>50%</small>';
+                hubIcon.className = 'fas fa-microchip';
+            } else if (completedSteps === 3) {
+                hubText.innerHTML = 'Analyzing<br>Threats<br><small>75%</small>';
+                hubIcon.className = 'fas fa-brain';
+            } else {
+                hubText.innerHTML = 'System<br>Complete<br><small>100%</small>';
+                hubIcon.className = 'fas fa-shield-alt';
+            }
+        }
+
+        // Provide contextual guidance based on current state
+        function provideContextualGuidance(step) {
+            switch(step) {
+                case 1:
+                    if (!processState.dataAcquired) {
+                        addLog('📊 STEP 1: Download TLE data from Space-Track.org', 'info');
+                        addLog('ℹ️  INFO: TLE = Two-Line Element sets contain orbital parameters', 'info');
+                    }
+                    break;
+                case 2:
+                    if (processState.dataAcquired && !processState.dataProcessed) {
+                        addLog('⚙️  STEP 2: Parse and extract orbital parameters', 'info');
+                        addLog('ℹ️  INFO: Converting raw TLE data to ML-ready format', 'info');
+                    } else if (!processState.dataAcquired) {
+                        addLog('⚠️  PREREQUISITE: Complete Step 1 (Data Acquisition) first', 'warning');
+                    }
+                    break;
+                case 3:
+                    if (processState.dataProcessed && !processState.modelTrained) {
+                        addLog('🧠 STEP 3: Train LSTM neural network', 'info');
+                        addLog('ℹ️  INFO: This may take several minutes depending on data size', 'info');
+                    } else if (!processState.dataProcessed) {
+                        addLog('⚠️  PREREQUISITE: Complete Steps 1-2 first', 'warning');
+                    }
+                    break;
+                case 4:
+                    if (processState.modelTrained && !processState.threatsAnalyzed) {
+                        addLog('🛡️  STEP 4: Analyze collision risks', 'info');
+                        addLog('ℹ️  INFO: Using trained model to predict satellite threats', 'info');
+                    } else if (!processState.modelTrained) {
+                        addLog('⚠️  PREREQUISITE: Complete Steps 1-3 first', 'warning');
+                    }
+                    break;
+            }
+        }
 
         // System status update
         function updateSystemStatus() {

@@ -398,5 +398,110 @@
     "timestamp": "2025-07-23T09:39:56.713922Z",
     "message": "Collision risk analysis complete for satellite 25544",
     "level": "success"
+  },
+  {
+    "timestamp": "2025-07-23T12:40:32.267247Z",
+    "message": "GPU configuration loaded successfully",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:02:34.760131Z",
+    "message": "GPU configuration loaded successfully",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:27:34.979162Z",
+    "message": "Downloading TLE data from Space-Track.org...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:27:49.673796Z",
+    "message": "TLE data downloaded successfully",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T17:28:02.240406Z",
+    "message": "Parsing TLE data and extracting orbital parameters...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:30:21.394303Z",
+    "message": "Parsed 20346 satellite objects",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T17:30:39.195311Z",
+    "message": "Training the LSTM model...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:30:39.843952Z",
+    "message": "Training LSTM model...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:33:02.268344Z",
+    "message": "Training data shape after cleaning: X=(481, 23, 7), y=(481, 3)",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:33:02.310381Z",
+    "message": "Data scaling complete.",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:33:08.524584Z",
+    "message": "Model architecture built. Starting training...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:33:41.491292Z",
+    "message": "Model training complete. Saving model...",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T17:33:42.212958Z",
+    "message": "Model saved to models/debris_lstm.h5",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T17:33:42.328593Z",
+    "message": "Model ready for deployment (trained on GPU)",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T17:33:42.346035Z",
+    "message": "Model trained successfully",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T17:34:55.366376Z",
+    "message": "Analyzing collision risks for satellite 25544...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:34:55.519223Z",
+    "message": "Starting GPU-accelerated risk analysis for satellite 25544...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:36:19.080635Z",
+    "message": "Risk analysis completed in 83.54 seconds",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T17:36:19.097448Z",
+    "message": "Creating visualization for top risks...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:36:19.658729Z",
+    "message": "Dashboard generation complete.",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T17:36:19.674348Z",
+    "message": "Collision risk analysis complete for satellite 25544",
+    "level": "success"
   }
 ]

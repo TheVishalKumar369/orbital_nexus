@@ -428,7 +428,7 @@ async def get_status():
     status = {
         "tle_data": os.path.exists('data/debris_tle.txt'),
         "orbital_params": os.path.exists('data/orbital_params.csv'),
-        "model": os.path.exists('models/debris_lstm.h5'),
+        "model": os.path.exists('models/debris_lstm.keras'),
         "scaler": os.path.exists('models/scaler.pkl'),
         "object_count": 0
     }

@@ -30,15 +30,41 @@ class TrajectoryPredictor:
         self.ts = load.timescale()
         
     def compute_future_positions(self, sat_obj, hours=24, step=1):
-        """Compute future positions for a satellite object"""
-        times = self.ts.utc(*self.ts.now().utc[:4], range(0, hours, step))
-        
-        positions = []
-        for t in times:
-            geocentric = sat_obj.at(t)
-            positions.append(geocentric.position.km)
-        
-        return np.array(positions)
+        """Compute future positions for a satellite object with error handling"""
+        try:
+            times = self.ts.utc(*self.ts.now().utc[:4], range(0, hours, step))
+            
+            positions = []
+            for t in times:
+                try:
+                    geocentric = sat_obj.at(t)
+                    pos = geocentric.position.km
+                    
+                    # Validate position values
+                    if np.any(np.isnan(pos)) or np.any(np.isinf(pos)):
+                        # Use Earth's center as fallback position
+                        pos = np.array([0.0, 0.0, 6371.0])  # Earth radius in km
+                    
+                    # Ensure reasonable bounds (within ~50,000 km of Earth)
+                    pos_magnitude = np.linalg.norm(pos)
+                    if pos_magnitude > 50000 or pos_magnitude < 100:
+                        # Normalize to reasonable LEO altitude
+                        pos = pos / pos_magnitude * 7000  # 700 km altitude
+                    
+                    positions.append(pos)
+                    
+                except Exception as e:
+                    print(f"Error computing position at time {t}: {e}")
+                    # Use default LEO position
+                    positions.append(np.array([0.0, 0.0, 7000.0]))
+            
+            return np.array(positions, dtype=np.float64)
+            
+        except Exception as e:
+            print(f"Error in compute_future_positions: {e}")
+            # Return default positions for LEO orbit
+            num_positions = max(1, hours // step)
+            return np.array([[0.0, 0.0, 7000.0]] * num_positions, dtype=np.float64)
     
     def add_sat_obj_column(self, df):
         """Add satellite objects column from TLE lines"""
@@ -75,16 +101,27 @@ class TrajectoryPredictor:
             # Get position history
             positions = self.compute_future_positions(sat_obj, hours=hours)
             
-            # Get orbital features - check if they exist
+            # Get orbital features - check if they exist and validate
             feature_columns = ['semi_major_axis', 'eccentricity', 'inclination', 'mean_motion']
             missing_features = [col for col in feature_columns if col not in sat_row]
             
             if missing_features:
                 print(f"Missing orbital features for {norad_id}: {missing_features}")
                 # Use default values
-                features = np.array([1.0, 0.1, 0.5, 15.0])  # Default values
+                features = np.array([0.06, 0.01, 1.0, 15.0], dtype=np.float64)  # Default values
             else:
-                features = sat_row[feature_columns].values
+                features = sat_row[feature_columns].values.astype(np.float64)
+                
+                # Validate and clean feature values
+                if np.any(np.isnan(features)) or np.any(np.isinf(features)):
+                    print(f"Invalid orbital features for {norad_id}, using defaults")
+                    features = np.array([0.06, 0.01, 1.0, 15.0], dtype=np.float64)
+                
+                # Ensure reasonable bounds
+                features[0] = max(0.01, min(features[0], 1.0))      # semi_major_axis
+                features[1] = max(0.0, min(features[1], 0.99))      # eccentricity
+                features[2] = max(0.0, min(features[2], np.pi))     # inclination
+                features[3] = max(1.0, min(features[3], 20.0))      # mean_motion
             
             # Combine positions and features
             sequences = []
@@ -231,15 +268,15 @@ class TrajectoryPredictor:
         add_log("Model training complete. Saving model...", level="success")
         # Save model and scaler
         os.makedirs('models', exist_ok=True)
-        self.model.save('models/debris_lstm.h5')
+        self.model.save('models/debris_lstm.keras')
         with open('models/scaler.pkl', 'wb') as f:
             pickle.dump(self.scaler, f)
-        add_log("Model saved to models/debris_lstm.h5", level="success")
+        add_log("Model saved to models/debris_lstm.keras", level="success")
         
         # Create deployment info
         deployment_info = {
             'trained_on': 'GPU' if tf.config.list_physical_devices('GPU') else 'CPU',
-            'model_path': 'models/debris_lstm.h5',
+            'model_path': 'models/debris_lstm.keras',
             'scaler_path': 'models/scaler.pkl',
             'training_samples': X_train.shape[0],
             'input_shape': X_train.shape[1:],

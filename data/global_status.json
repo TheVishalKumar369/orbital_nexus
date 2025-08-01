@@ -1,8 +1,8 @@
 {
-  "last_tle_download": 1753259705,
-  "last_model_training": 1753260366,
+  "last_tle_download": 1754069269,
+  "last_model_training": 1754069622,
   "tle_cooldown_seconds": 5400,
   "training_cooldown_seconds": 3600,
-  "download_count": 3,
-  "training_count": 2
+  "download_count": 4,
+  "training_count": 3
 }
