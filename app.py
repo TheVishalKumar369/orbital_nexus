@@ -12,7 +12,7 @@ from scripts.lstm_model import TrajectoryPredictor
 from scripts.dashboard import CollisionRiskDashboard
 from dotenv import load_dotenv
 import uvicorn
-from enhanced_routes import router as enhanced_router
+from scripts.enhanced_routes import router as enhanced_router
 from fastapi_limiter import FastAPILimiter
 try:
     from fastapi_limiter.depends import RateLimiter, get_remote_address
@@ -169,7 +169,7 @@ load_logs_from_disk()
 
 # GPU Configuration Initialization
 try:
-    from gpu_config import configure_tensorflow_for_production
+    from scripts.gpu_config import configure_tensorflow_for_production
     GPU_CONFIGURED = configure_tensorflow_for_production()
     add_log("GPU configuration loaded successfully", level="info")
 except Exception as gpu_error:
@@ -183,9 +183,14 @@ except Exception as gpu_error:
 app.include_router(enhanced_router)
 @app.on_event("startup")
 async def startup():
-    redis_url = os.getenv("REDIS_URL", "redis://redis:6379/0")
-    redis = await aioredis.from_url(redis_url, encoding="utf8", decode_responses=True)
-    await FastAPILimiter.init(redis)
+    try:
+        redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+        redis = await aioredis.from_url(redis_url, encoding="utf8", decode_responses=True)
+        await FastAPILimiter.init(redis)
+        add_log("Redis connection established successfully", level="info")
+    except Exception as e:
+        add_log(f"Warning: Failed to initialize Redis rate limiter: {str(e)}", level="warning")
+        # Continue without rate limiting if Redis fails
 
 # Custom rate limiter for download endpoint
 async def global_and_rate_limit(request: Request):
@@ -207,10 +212,20 @@ async def classic_index(request: Request):
     """Classic dashboard page"""
     return templates.TemplateResponse("index.html", {"request": request})
 
+# Safe rate limiter dependency
+async def safe_rate_limiter(request: Request):
+    try:
+        limiter = RateLimiter(times=20, seconds=60, identifier=get_remote_address)
+        return await limiter(request)
+    except Exception as e:
+        # If rate limiting fails, log it but continue
+        add_log(f"Rate limiting unavailable: {str(e)}", level="warning")
+        return None
+
 @app.post("/api/download-data")
 async def download_data(
     request: Request,
-    rate_limiter=Depends(RateLimiter(times=20, seconds=60, identifier=get_remote_address))
+    rate_limiter=Depends(safe_rate_limiter)
 ):
     tle_file = 'data/debris_tle.txt'
     tle_data = ""
@@ -339,9 +354,11 @@ async def analyze_risks(request: SatelliteRequest):
         add_log(f"Analyzing collision risks for satellite {request.sat_id}...", level="info")
         dashboard = CollisionRiskDashboard()
         results = dashboard.generate_dashboard(str(request.sat_id))
-        if results:
+        
+        if results and isinstance(results, dict):
             # Convert risk table to JSON-serializable format
-            risk_data = results['risk_table']
+            risk_data = results.get('risk_table', [])
+            
             # Ensure it's a list (it should already be from the updated dashboard)
             if not isinstance(risk_data, list):
                 if isinstance(risk_data, pd.DataFrame):
@@ -351,21 +368,40 @@ async def analyze_risks(request: SatelliteRequest):
                 else:
                     risk_data = []
             
+            # Ensure all items in risk_data are dictionaries
+            clean_risk_data = []
+            for item in risk_data:
+                if isinstance(item, dict):
+                    clean_risk_data.append(item)
+                else:
+                    clean_risk_data.append({'message': str(item)})
+            
+            total_risks = results.get('total_risks', 0)
+            if not isinstance(total_risks, int):
+                total_risks = len(clean_risk_data)
+            
             add_log(f"Collision risk analysis complete for satellite {request.sat_id}", level="success")
             return RiskAnalysisResponse(
                 status="success",
-                total_risks=results['total_risks'],
-                risk_table=risk_data
+                total_risks=total_risks,
+                risk_table=clean_risk_data
             )
         else:
             add_log(f"Failed to analyze risks for satellite {request.sat_id}", level="error")
             return JSONResponse({
                 "status": "error", 
-                "message": "Failed to analyze risks"
+                "message": "Failed to analyze risks - no results returned"
             })
     except Exception as e:
         add_log(f"Error analyzing risks: {str(e)}", level="error")
-        raise HTTPException(status_code=500, detail=str(e))
+        # Return a proper error response instead of raising HTTPException
+        return JSONResponse(
+            status_code=500,
+            content={
+                "status": "error",
+                "message": f"Internal server error: {str(e)}"
+            }
+        )
 
 @app.get("/api/satellites")
 async def get_satellites():
@@ -452,17 +488,25 @@ async def get_logs():
 @app.get("/api/gpu-status")
 async def get_gpu_status():
     """Get GPU status and configuration"""
-    from gpu_config import get_device_info, check_gpu_environment
-    
-    device_info = get_device_info()
-    gpu_env = check_gpu_environment()
-    
-    return JSONResponse({
-        "device_info": device_info,
-        "environment_variables": gpu_env,
-        "gpu_available": device_info['gpu_count'] > 0,
-        "using_gpu": device_info['gpu_count'] > 0 and device_info['cuda_available']
-    })
+    try:
+        from scripts.gpu_config import get_device_info, check_gpu_environment
+        
+        device_info = get_device_info()
+        gpu_env = check_gpu_environment()
+        
+        return JSONResponse({
+            "device_info": device_info,
+            "environment_variables": gpu_env,
+            "gpu_available": device_info['gpu_count'] > 0,
+            "using_gpu": device_info['gpu_count'] > 0 and device_info['cuda_available']
+        })
+    except ImportError as e:
+        return JSONResponse({
+            "device_info": {"error": "GPU config module not available"},
+            "environment_variables": {},
+            "gpu_available": False,
+            "using_gpu": False
+        })
 
 @app.get("/health")
 async def health_check():

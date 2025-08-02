@@ -44,7 +44,7 @@ def download_tle_data():
         tle_data = st.tle(
             iter_lines=True,
             # norad_cat_id=range(1, 50000),  # All objects (commented out: caused URL too long error)
-            epoch='>now-1',                # Last 30 days
+            epoch='>now-7',                # Last 30 days
             format='tle'
         )
 

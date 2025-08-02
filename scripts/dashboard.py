@@ -233,6 +233,10 @@ class CollisionRiskDashboard:
                 risk_table = [{'message': risk_summary}]
             else:
                 risk_table = []
+
+            # Ensure risk_table is a list
+            if not isinstance(risk_table, list):
+                risk_table = [{'message': str(risk_table)}]
             
             # Create a simplified 3D plot for top 10 risks only (faster)
             app.add_log("Creating visualization for top risks...", level="info")

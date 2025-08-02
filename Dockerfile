@@ -25,7 +25,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # (TensorFlow is already installed in the base image)
 
-# COPY . .  # Disabled for development; use volume mount instead (enable in production mode)
+COPY . .
 
 # Create necessary directories
 RUN mkdir -p data models notebooks scripts

@@ -9,11 +9,13 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - TF_FORCE_GPU_ALLOW_GROWTH=true
       - TF_GPU_MEMORY_FRACTION=0.8
+      - REDIS_URL=redis://redis:6379/0
     volumes:
       - .:/app
       - ./data:/app/data
       - ./models:/app/models
       - ./notebooks:/app/notebooks
+      - ./scripts:/app/scripts
     restart: unless-stopped
     runtime: nvidia
     deploy:

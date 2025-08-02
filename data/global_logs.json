@@ -503,5 +503,95 @@
     "timestamp": "2025-08-01T17:36:19.674348Z",
     "message": "Collision risk analysis complete for satellite 25544",
     "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T17:56:17.235173Z",
+    "message": "GPU configuration loaded successfully",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:56:52.387467Z",
+    "message": "Parsing TLE data and extracting orbital parameters...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T17:57:17.460033Z",
+    "message": "Parsed 20346 satellite objects",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T18:04:03.319601Z",
+    "message": "Training the LSTM model...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T18:04:03.827240Z",
+    "message": "Training LSTM model...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T18:05:46.044913Z",
+    "message": "Training data shape after cleaning: X=(1000, 23, 7), y=(1000, 3)",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T18:05:46.080811Z",
+    "message": "Data scaling complete.",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T18:05:50.017340Z",
+    "message": "Model architecture built. Starting training...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T18:06:16.102724Z",
+    "message": "Model training complete. Saving model...",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T18:06:16.628102Z",
+    "message": "Model saved to models/debris_lstm.keras",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T18:06:16.675761Z",
+    "message": "Model ready for deployment (trained on GPU)",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T18:06:16.712373Z",
+    "message": "Model trained successfully",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T18:06:40.392477Z",
+    "message": "Analyzing collision risks for satellite 25544...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T18:06:40.491816Z",
+    "message": "Starting GPU-accelerated risk analysis for satellite 25544...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T18:07:35.999393Z",
+    "message": "Risk analysis completed in 55.49 seconds",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T18:07:36.009608Z",
+    "message": "Creating visualization for top risks...",
+    "level": "info"
+  },
+  {
+    "timestamp": "2025-08-01T18:07:36.200220Z",
+    "message": "Dashboard generation complete.",
+    "level": "success"
+  },
+  {
+    "timestamp": "2025-08-01T18:07:36.217821Z",
+    "message": "Collision risk analysis complete for satellite 25544",
+    "level": "success"
   }
 ]
