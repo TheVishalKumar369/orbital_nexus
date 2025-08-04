@@ -204,12 +204,7 @@ async def global_and_rate_limit(request: Request):
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    """Cyberpunk-themed main dashboard page"""
-    return templates.TemplateResponse("cyberpunk_index.html", {"request": request})
-
-@app.get("/classic", response_class=HTMLResponse)
-async def classic_index(request: Request):
-    """Classic dashboard page"""
+    """Main dashboard page"""
     return templates.TemplateResponse("index.html", {"request": request})
 
 # Safe rate limiter dependency
