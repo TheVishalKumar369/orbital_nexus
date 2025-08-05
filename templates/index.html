@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🛰️ ORBITAL NEXUS - Space Debris Tracking System</title>
+    <title>🛰️ ORBITAL NEXUS - Advanced Space Debris Tracking System</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;700&family=Electrolize&display=swap" rel="stylesheet">
     <style>
         :root {
             --neon-cyan: #00ffff;
@@ -463,202 +463,124 @@
             100% { transform: translateX(100%); }
         }
 
-        /* Process Flow Container - Vertical Zigzag Layout */
-        .process-flow-container {
-            position: relative;
-            max-width: 1400px;
-            margin: 3rem auto;
-            padding: 4rem 2rem;
-            min-height: 2000px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Zigzag Row Containers */
-        .zigzag-row {
-            display: flex;
-            align-items: center;
-            width: 100%;
+        /* Simplified Grid Layout */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
             margin: 3rem 0;
             position: relative;
-            min-height: 320px;
-        }
-        
-        .zigzag-row.left-aligned {
-            justify-content: flex-start;
-        }
-        
-        .zigzag-row.right-aligned {
-            justify-content: flex-end;
         }
 
-        /* Process Steps - Zigzag Cards */
+        /* Process Flow Container - Clean Layout */
+        .process-flow-container {
+            position: relative;
+            max-width: 1600px;
+            margin: 4rem auto;
+            padding: 4rem;
+            height: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Process Steps - Clean Arrangement */
         .process-step {
             background: rgba(22, 33, 62, 0.95);
             border: 2px solid rgba(0,255,255,0.4);
             border-radius: 15px;
-            padding: 2rem;
-            transition: all 0.4s ease;
+            padding: 1.5rem;
             cursor: pointer;
-            overflow: visible;
-            width: 350px;
-            min-height: 250px;
+            width: 280px;
+            height: 200px;
             backdrop-filter: blur(15px);
             box-shadow: 0 8px 32px rgba(0,255,255,0.15);
-            position: relative;
+            position: absolute;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
             z-index: 10;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .zigzag-row.left-aligned .process-step {
-            margin-left: 5rem;
-        }
-        
-        .zigzag-row.right-aligned .process-step {
-            margin-right: 5rem;
-        }
-
-        /* Detail Containers - Side Info Panels */
-        .detail-container {
-            background: rgba(16, 21, 46, 0.9);
-            border: 2px solid rgba(139, 0, 255, 0.5);
-            border-radius: 20px;
-            padding: 2.5rem;
-            width: 400px;
-            min-height: 280px;
-            backdrop-filter: blur(15px);
-            box-shadow: 
-                0 0 30px rgba(139, 0, 255, 0.2),
-                inset 0 1px 0 rgba(139, 0, 255, 0.1);
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.5s ease;
-            z-index: 5;
-        }
-        
-        .detail-container.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .detail-container.left {
-            right: calc(100% - 50px);
-        }
-        
-        .detail-container.right {
-            left: calc(100% - 50px);
-        }
-
-        .detail-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 
-                0 10px 50px rgba(139, 0, 255, 0.3),
-                inset 0 1px 0 rgba(139, 0, 255, 0.2);
-        }
-
-        /* Zigzag Connection Arrows */
-        .zigzag-arrow {
-            position: absolute;
-            z-index: 8;
-        }
-        
-        .zigzag-arrow svg {
-            filter: drop-shadow(0 0 10px currentColor);
-        }
-        
-        .zigzag-arrow path {
-            stroke: var(--neon-cyan);
-            stroke-width: 3;
-            fill: none;
-            animation: arrow-flow 3s ease-in-out infinite;
-        }
-        
-        .zigzag-arrow polygon {
-            fill: var(--neon-cyan);
-            animation: arrow-glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes arrow-flow {
-            0%, 100% { 
-                opacity: 0.6;
-                stroke-dasharray: 10, 5;
-                stroke-dashoffset: 0;
-            }
-            50% { 
-                opacity: 1;
-                stroke-dashoffset: 15;
-            }
-        }
-
-        /* Central Spine Connection */
-        .central-spine {
-            position: absolute;
+        /* Circular positioning - Better spacing */
+        .step-1 {
+            top: 80px;
             left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(180deg, 
-                transparent 0%,
-                rgba(0, 255, 255, 0.3) 10%, 
-                rgba(0, 255, 255, 0.8) 50%, 
-                rgba(0, 255, 255, 0.3) 90%,
-                transparent 100%);
             transform: translateX(-50%);
-            z-index: 1;
-            animation: spine-pulse 4s ease-in-out infinite;
         }
         
-        @keyframes spine-pulse {
-            0%, 100% { 
-                opacity: 0.4;
-                box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
-            }
-            50% { 
-                opacity: 1;
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
-            }
+        .step-2 {
+            top: 50%;
+            right: 80px;
+            transform: translateY(-50%);
+        }
+        
+        .step-3 {
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .step-4 {
+            top: 50%;
+            left: 80px;
+            transform: translateY(-50%);
         }
 
-        /* Detail Container Headers */
-        .detail-header {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.4rem;
+        .process-step:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 25px rgba(0,255,255,0.3);
+        }
+
+        .process-step.active {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 30px rgba(0,255,65,0.4);
+        }
+
+        .process-step.completed {
+            border-color: var(--neon-purple);
+            background: rgba(139, 0, 255, 0.1);
+        }
+
+        /* Details Panel - Static at bottom */
+        .details-panel {
+            background: rgba(16, 21, 46, 0.95);
+            border: 2px solid rgba(139, 0, 255, 0.5);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 30px rgba(139, 0, 255, 0.2);
+            display: none;
+        }
+
+        .details-panel.show {
+            display: block;
+        }
+
+        .details-panel h3 {
             color: var(--neon-purple);
+            font-family: 'Orbitron', monospace;
+            margin-bottom: 1rem;
             text-align: center;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 0 10px rgba(139, 0, 255, 0.5);
-            border-bottom: 1px solid rgba(139, 0, 255, 0.3);
-            padding-bottom: 1rem;
         }
 
-        .detail-content {
+        .details-content {
             color: var(--text-secondary);
             line-height: 1.6;
-            font-size: 0.95rem;
         }
 
-        .detail-content h4 {
-            color: var(--neon-cyan);
-            margin: 1rem 0 0.5rem 0;
-            font-family: 'Orbitron', monospace;
+        .details-content ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
         }
 
-        .detail-content ul {
+        .details-content li {
             margin: 0.5rem 0;
-            padding-left: 1.5rem;
         }
 
-        .detail-content li {
-            margin: 0.3rem 0;
-            color: var(--text-secondary);
-        }
 
         /* Central Data Flow Hub */
         .central-hub {
@@ -705,292 +627,52 @@
             }
         }
 
-        /* Animated Flow Arrows */
+        /* Simple Static Arrows - No Animation */
         .flow-arrow {
             position: absolute;
-            z-index: 10;
+            z-index: 5;
+            opacity: 0.6;
         }
 
         .flow-arrow svg {
-            filter: drop-shadow(0 0 10px currentColor);
+            filter: drop-shadow(0 0 5px currentColor);
         }
 
-        /* Arrow 1: From Step 1 to Center */
+        /* Arrow positioning - Fixed to not overlap cards */
         .arrow-1-to-center {
-            top: 120px;
-            left: 320px;
-            width: 200px;
-            height: 100px;
-        }
-
-        /* Arrow 2: From Step 2 to Center */
-        .arrow-2-to-center {
-            top: 120px;
-            right: 320px;
-            width: 200px;
-            height: 100px;
-            transform: scaleX(-1);
-        }
-
-        /* Arrow 3: From Center to Step 3 */
-        .arrow-center-to-3 {
-            bottom: 120px;
-            left: 320px;
-            width: 200px;
-            height: 100px;
-            transform: scaleY(-1);
-        }
-
-        /* Arrow 4: From Center to Step 4 */
-        .arrow-center-to-4 {
-            bottom: 120px;
-            right: 320px;
-            width: 200px;
-            height: 100px;
-            transform: scale(-1, -1);
-        }
-
-        /* Arrow Animation */
-        .arrow-animated {
-            animation: arrow-flow 2s ease-in-out infinite;
-        }
-
-        .arrow-glow {
-            animation: arrow-glow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes arrow-flow {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        @keyframes arrow-glow {
-            0% { 
-                filter: drop-shadow(0 0 5px currentColor);
-                color: var(--neon-cyan);
-            }
-            100% { 
-                filter: drop-shadow(0 0 20px currentColor);
-                color: var(--neon-purple);
-            }
-        }
-
-        /* Data Flow Particles */
-        .data-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--neon-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 10px currentColor;
-        }
-
-        .particle-1 {
-            animation: particle-flow-1 4s linear infinite;
-        }
-
-        .particle-2 {
-            animation: particle-flow-2 4s linear infinite;
-            animation-delay: -1s;
-        }
-
-        .particle-3 {
-            animation: particle-flow-3 4s linear infinite;
-            animation-delay: -2s;
-        }
-
-        .particle-4 {
-            animation: particle-flow-4 4s linear infinite;
-            animation-delay: -3s;
-        }
-
-        @keyframes particle-flow-1 {
-            0% { top: 150px; left: 330px; opacity: 0; }
-            25% { opacity: 1; }
-            50% { top: 50%; left: 50%; transform: translate(-50%, -50%); }
-            75% { opacity: 1; }
-            100% { bottom: 150px; left: 330px; opacity: 0; }
-        }
-
-        @keyframes particle-flow-2 {
-            0% { top: 150px; right: 330px; opacity: 0; }
-            25% { opacity: 1; }
-            50% { top: 50%; right: 50%; transform: translate(50%, -50%); }
-            75% { opacity: 1; }
-            100% { bottom: 150px; right: 330px; opacity: 0; }
-        }
-
-        @keyframes particle-flow-3 {
-            0% { top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0; }
-            25% { opacity: 1; }
-            100% { bottom: 150px; left: 330px; opacity: 0; }
-        }
-
-        @keyframes particle-flow-4 {
-            0% { top: 50%; right: 50%; transform: translate(50%, -50%); opacity: 0; }
-            25% { opacity: 1; }
-            100% { bottom: 150px; right: 330px; opacity: 0; }
-        }
-
-        /* Wireframe Connection Lines */
-        .connection-line {
-            position: absolute;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(0,255,255,0.3) 25%, 
-                rgba(0,255,255,0.6) 50%, 
-                rgba(0,255,255,0.3) 75%, 
-                transparent 100%);
-            animation: line-pulse 3s ease-in-out infinite;
-            z-index: 5;
-        }
-
-        /* Horizontal Lines */
-        .line-horizontal {
-            height: 2px;
-        }
-
-        /* Vertical Lines */
-        .line-vertical {
-            width: 2px;
-            background: linear-gradient(0deg, 
-                transparent 0%, 
-                rgba(0,255,255,0.3) 25%, 
-                rgba(0,255,255,0.6) 50%, 
-                rgba(0,255,255,0.3) 75%, 
-                transparent 100%);
-        }
-
-        /* Top horizontal line connecting Step 1 to Step 2 */
-        .line-top {
-            top: 125px;
-            left: 320px;
-            right: 320px;
-        }
-
-        /* Left vertical line from Step 1 down */
-        .line-left-down {
-            top: 250px;
-            left: 160px;
-            height: 400px;
-        }
-
-        /* Right vertical line from Step 2 down */
-        .line-right-down {
-            top: 250px;
-            right: 160px;
-            height: 400px;
-        }
-
-        /* Bottom horizontal line connecting Step 3 to center */
-        .line-bottom-left {
-            bottom: 125px;
-            left: 320px;
-            width: 220px;
-        }
-
-        /* Bottom horizontal line connecting center to Step 4 */
-        .line-bottom-right {
-            bottom: 125px;
-            right: 320px;
-            width: 220px;
-        }
-
-        /* Center connecting lines */
-        .line-center-horizontal {
-            top: 50%;
-            left: 540px;
-            right: 540px;
-            margin-top: -1px;
-        }
-
-        .line-center-vertical {
+            top: 280px;
             left: 50%;
-            top: 300px;
-            bottom: 300px;
-            margin-left: -1px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
         }
 
-        @keyframes line-pulse {
-            0%, 100% { 
-                opacity: 0.4; 
-                box-shadow: 0 0 2px rgba(0,255,255,0.3);
-            }
-            50% { 
-                opacity: 0.8; 
-                box-shadow: 0 0 8px rgba(0,255,255,0.6);
-            }
+        .arrow-2-to-center {
+            top: 50%;
+            right: 360px;
+            transform: translateY(-50%) rotate(90deg);
+            width: 80px;
+            height: 80px;
         }
 
-        /* Corner connectors */
-        .corner-connector {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border: 2px solid rgba(0,255,255,0.6);
-            background: rgba(0,255,255,0.2);
-            border-radius: 50%;
-            animation: corner-pulse 2s ease-in-out infinite;
+        .arrow-center-to-3 {
+            bottom: 280px;
+            left: 50%;
+            transform: translateX(-50%) rotate(180deg);
+            width: 80px;
+            height: 80px;
         }
 
-        .corner-top-left {
-            top: 250px;
-            left: 156px;
+        .arrow-center-to-4 {
+            top: 50%;
+            left: 360px;
+            transform: translateY(-50%) rotate(270deg);
+            width: 80px;
+            height: 80px;
         }
 
-        .corner-top-right {
-            top: 250px;
-            right: 156px;
-        }
 
-        .corner-bottom-left {
-            bottom: 125px;
-            left: 536px;
-        }
 
-        .corner-bottom-right {
-            bottom: 125px;
-            right: 536px;
-        }
-
-        @keyframes corner-pulse {
-            0%, 100% { 
-                transform: scale(1);
-                box-shadow: 0 0 5px rgba(0,255,255,0.4);
-            }
-            50% { 
-                transform: scale(1.2);
-                box-shadow: 0 0 15px rgba(0,255,255,0.8);
-            }
-        }
-
-        /* Active Step Highlighting */
-        .process-step.active {
-            border-color: var(--neon-green);
-            box-shadow: 0 0 30px rgba(0,255,65,0.4);
-            transform: scale(1.05);
-        }
-
-        .process-step.completed {
-            border-color: var(--neon-purple);
-            background: rgba(139, 0, 255, 0.1);
-        }
-
-        .process-step.processing {
-            border-color: var(--neon-orange);
-            animation: processing-glow 1s ease-in-out infinite alternate;
-        }
-
-        @keyframes processing-glow {
-            0% { box-shadow: 0 0 20px rgba(255,149,0,0.3); }
-            100% { box-shadow: 0 0 40px rgba(255,149,0,0.8); }
-        }
-
-        .process-step:hover {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 25px rgba(0,255,255,0.3);
-            transform: scale(1.02);
-        }
 
         .step-number {
             position: absolute;
@@ -1025,103 +707,11 @@
         .step-description {
             color: var(--text-secondary);
             line-height: 1.6;
-            margin-bottom: 1.5rem;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            opacity: 0;
+            font-size: 0.9rem;
         }
 
-        .step-description.expanded {
-            max-height: 300px;
-            opacity: 1;
-            margin-top: 1rem;
-        }
 
-        /* Step Guidance Styles */
-        .step-guidance {
-            position: absolute;
-            bottom: -5px;
-            left: 10px;
-            right: 10px;
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 0.8rem;
-            font-size: 0.8rem;
-            backdrop-filter: blur(5px);
-            animation: guidance-glow 2s ease-in-out infinite alternate;
-        }
 
-        .guidance-status {
-            color: var(--neon-green);
-            font-weight: bold;
-            font-family: 'Orbitron', monospace;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.3rem;
-        }
-
-        .guidance-message {
-            color: var(--text-secondary);
-            line-height: 1.3;
-        }
-
-        @keyframes guidance-glow {
-            0% {
-                border-color: rgba(0, 255, 255, 0.3);
-                box-shadow: 0 0 5px rgba(0, 255, 255, 0.2);
-            }
-            100% {
-                border-color: rgba(0, 255, 255, 0.6);
-                box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
-            }
-        }
-
-        /* Enhanced step hover effects */
-        .process-step.active .step-guidance {
-            border-color: rgba(0, 255, 65, 0.5);
-            background: rgba(0, 255, 65, 0.1);
-        }
-
-        .process-step.active .guidance-status {
-            color: var(--neon-green);
-            text-shadow: 0 0 10px currentColor;
-        }
-
-        .process-step.completed .step-guidance {
-            border-color: rgba(139, 0, 255, 0.5);
-            background: rgba(139, 0, 255, 0.1);
-        }
-
-        .process-step.completed .guidance-status {
-            color: var(--neon-purple);
-        }
-
-        .toggle-btn {
-            background: rgba(0,255,255,0.1);
-            border: 1px solid rgba(0,255,255,0.3);
-            color: var(--neon-cyan);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-family: 'Orbitron', monospace;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: absolute;
-            top: 15px;
-            right: 60px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .toggle-btn:hover {
-            background: rgba(0,255,255,0.2);
-            border-color: var(--neon-cyan);
-            transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(0,255,255,0.3);
-        }
 
         .cyber-button {
             background: linear-gradient(45deg, var(--darker-panel), var(--dark-panel));
