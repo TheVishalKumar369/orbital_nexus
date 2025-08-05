@@ -1,6 +1,8 @@
 services:
   space-debris-tracker:
-    build: .
+    build:
+      context: .
+      dockerfile: Containerfile
     ports:
       - "5000:5000"
     environment:
@@ -17,16 +19,14 @@ services:
       - ./notebooks:/app/notebooks
       - ./scripts:/app/scripts
     restart: unless-stopped
-    runtime: nvidia
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+    devices:
+      - /dev/nvidia0:/dev/nvidia0
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-uvm:/dev/nvidia-uvm
+    depends_on:
+      - redis
   redis:
-    image: redis:7
+    image: docker.io/library/redis:7
     ports:
       - "6379:6379"
-    restart: unless-stopped 
+    restart: unless-stopped

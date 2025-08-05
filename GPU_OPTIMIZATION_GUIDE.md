@@ -13,8 +13,8 @@ Your debris tracking system has been successfully optimized for GPU acceleration
 
 ### ⚙️ Technical Changes Made
 
-#### 1. Docker Configuration Updates
-- **File**: `docker-compose.yml`
+#### 1. Podman Configuration Updates
+- **File**: `podman-compose.yml`
 - **Changes**: 
   - Added proper GPU runtime configuration
   - Set environment variables for GPU memory management
@@ -71,7 +71,7 @@ Your debris tracking system has been successfully optimized for GPU acceleration
 
 #### 1. Start the System
 ```bash
-docker-compose up -d
+podman-compose up -d
 ```
 
 #### 2. Check GPU Status
@@ -79,8 +79,8 @@ docker-compose up -d
 # Via API
 curl http://localhost:5000/api/gpu-status
 
-# Via Docker
-docker exec debris_tracking_system-space-debris-tracker-1 python gpu_config.py
+# Via Podman
+podman exec debris_tracking_system-space-debris-tracker-1 python gpu_config.py
 ```
 
 #### 3. Monitor Performance
@@ -93,14 +93,14 @@ docker exec debris_tracking_system-space-debris-tracker-1 python gpu_config.py
 #### Common Issues & Solutions
 
 1. **GPU Not Detected**
-   - Ensure Docker Desktop GPU support is enabled
+   - Ensure Podman with GPU support is enabled
    - Check NVIDIA drivers are up to date
    - Verify `nvidia-smi` works on host
 
 2. **Out of Memory Errors**
    - Reduce `TF_GPU_MEMORY_FRACTION` (current: 0.8)
    - Enable memory growth (already configured)
-   - Restart container: `docker-compose restart`
+   - Restart container: `podman-compose restart`
 
 3. **Performance Not Improved**
    - Check if GPU is actually being used: `nvidia-smi`
@@ -110,13 +110,13 @@ docker exec debris_tracking_system-space-debris-tracker-1 python gpu_config.py
 #### Monitoring Commands
 ```bash
 # Check container status
-docker ps
+podman ps
 
 # View application logs
-docker logs debris_tracking_system-space-debris-tracker-1
+podman logs debris_tracking_system-space-debris-tracker-1
 
 # Test GPU functionality
-docker exec debris_tracking_system-space-debris-tracker-1 python test_gpu.py
+podman exec debris_tracking_system-space-debris-tracker-1 python test_gpu.py
 
 # Monitor GPU usage
 watch -n 1 nvidia-smi

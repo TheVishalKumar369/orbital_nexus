@@ -44,4 +44,11 @@ data/
 models/
 
 # Environment files
-.env 
+.env
+
+# Container files
+Dockerfile*
+docker-compose*
+.dockerignore
+podman-compose*
+.containerignore

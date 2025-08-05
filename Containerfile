@@ -1,5 +1,5 @@
 # Use the official TensorFlow GPU image as a parent image
-FROM tensorflow/tensorflow:2.13.0-gpu
+FROM docker.io/library/tensorflow/tensorflow:2.13.0-gpu
 
 # Set working directory
 WORKDIR /app
@@ -23,8 +23,7 @@ ENV CUDA_VISIBLE_DEVICES=0
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# (TensorFlow is already installed in the base image)
-
+# Copy application files
 COPY . .
 
 # Create necessary directories
@@ -38,4 +37,4 @@ ENV PYTHONUNBUFFERED=1
 EXPOSE 5000
 
 # Run the application with uvicorn
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"] 
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]

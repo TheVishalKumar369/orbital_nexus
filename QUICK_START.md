@@ -1,7 +1,7 @@
 # 🚀 Quick Start Guide
 
 ## Prerequisites
-1. **Docker & Docker Compose** installed
+1. **Podman & Podman Compose** installed
 2. **Space-Track.org account** (free registration)
 
 ## Setup Steps
@@ -21,10 +21,10 @@ python start.py
 ```
 
 This script will:
-- ✅ Check Docker installation
+- ✅ Check Podman installation
 - ✅ Verify .env configuration
 - ✅ Create necessary directories
-- ✅ Build and start the Docker container
+- ✅ Build and start the Podman container
 - ✅ Provide access instructions
 
 ### 3. Access the Application
@@ -60,20 +60,20 @@ FastAPI provides automatic API documentation:
 - **ReDoc**: Visit `http://localhost:5000/redoc`
 - **Health Check**: Visit `http://localhost:5000/health`
 
-## Docker Commands
+## Podman Commands
 
 ```bash
 # Start the application
-docker-compose up -d
+podman-compose up -d
 
 # View logs
-docker-compose logs -f
+podman-compose logs -f
 
 # Stop the application
-docker-compose down
+podman-compose down
 
 # Rebuild and restart
-docker-compose up --build -d
+podman-compose up --build -d
 ```
 
 ## FastAPI Development
@@ -90,9 +90,9 @@ uvicorn app:app --host 0.0.0.0 --port 5000 --workers 4
 
 ### Common Issues
 
-1. **Docker not running**
-   - Start Docker Desktop
-   - Ensure Docker service is running
+1. **Podman not running**
+   - Start Podman service
+   - Ensure Podman is properly configured
 
 2. **Space-Track API errors**
    - Verify credentials in .env file
@@ -100,7 +100,7 @@ uvicorn app:app --host 0.0.0.0 --port 5000 --workers 4
    - Respect rate limits (100 req/min, 2000 req/day)
 
 3. **Port 5000 already in use**
-   - Change port in docker-compose.yml
+   - Change port in podman-compose.yml
    - Or stop other services using port 5000
 
 4. **Memory issues during training**
@@ -115,7 +115,7 @@ uvicorn app:app --host 0.0.0.0 --port 5000 --workers 4
 ### Getting Help
 
 - Check the system log in the web dashboard
-- View Docker logs: `docker-compose logs -f`
+- View Podman logs: `podman-compose logs -f`
 - Access API documentation at `/docs`
 - Review the main README.md for detailed documentation
 

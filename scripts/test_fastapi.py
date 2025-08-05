@@ -81,7 +81,7 @@ def main():
     else:
         print("\n❌ FastAPI Space Debris Tracker test failed!")
         print("Please check:")
-        print("1. Is the Docker container running?")
+        print("1. Is the Podman container running?")
         print("2. Is port 5000 available?")
         print("3. Are all dependencies installed?")
         sys.exit(1)

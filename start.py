@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Space Debris Tracker - Startup Script
+Space Debris Tracker - Main Startup Script
 This script helps initialize the project and provides a simple interface.
 """
 
@@ -8,15 +8,6 @@ import os
 import sys
 import subprocess
 from pathlib import Path
-import tensorflow as tf
-
-gpus = tf.config.list_physical_devices('GPU')
-if gpus:
-    print("TensorFlow detected the following GPU(s):")
-    for gpu in gpus:
-        print(" -", gpu)
-else:
-    print("No GPU detected by TensorFlow. Using CPU.")
 
 def check_podman():
     """Check if Podman is installed"""
@@ -140,4 +131,4 @@ def main():
         print("\n❌ Failed to start services. Check the error messages above.")
 
 if __name__ == "__main__":
-    main() 
+    main()

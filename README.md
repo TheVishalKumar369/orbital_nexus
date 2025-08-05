@@ -8,7 +8,7 @@ A machine learning system for predicting future positions of space debris and as
 - **LSTM Trajectory Forecast**: 48-hour position predictions using deep learning
 - **Collision Risk Assessment**: 3D visualization of high-risk zones
 - **Real-time Dashboard**: Interactive web interface for monitoring
-- **Docker Containerization**: Easy deployment and scaling
+- **Podman Containerization**: Easy deployment and scaling with rootless containers
 - **FastAPI Backend**: Modern, high-performance API with automatic documentation
 
 ## 🛠️ Technology Stack
@@ -20,12 +20,12 @@ A machine learning system for predicting future positions of space debris and as
 - **Skyfield**: Astronomical calculations
 - **Space-Track API**: TLE data acquisition
 - **Plotly**: Interactive 3D visualizations
-- **Docker**: Containerization
+- **Podman**: Rootless containerization
 
 ## 📋 Prerequisites
 
 1. **Space-Track.org Account**: Register at [Space-Track.org](https://www.space-track.org/)
-2. **Docker**: Install Docker and Docker Compose
+2. **Podman**: Install Podman and podman-compose
 3. **Git**: Clone this repository
 
 ## 🚀 Quick Start
@@ -52,16 +52,19 @@ SPACETRACK_PASSWORD=your_password_here
 FLASK_SECRET_KEY=your-secret-key-here
 ```
 
-### 3. Build and Run with Docker
+### 3. Build and Run with Podman
 ```bash
-# Build the Docker image
-docker-compose build
+# Build the Podman image
+podman-compose build
 
-# Start the application
-docker-compose up -d
+# Start the application (GPU support)
+podman-compose up -d
+
+# Or start with CPU-only mode
+podman-compose -f podman-compose.cpu.yml up -d
 
 # View logs
-docker-compose logs -f
+podman-compose logs -f
 ```
 
 ### 4. Access the Application
@@ -108,8 +111,8 @@ space-debris-tracker/
 │   └── index.html         # Main dashboard
 ├── app.py                 # FastAPI application
 ├── requirements.txt       # Python dependencies
-├── Dockerfile            # Docker configuration
-├── docker-compose.yml    # Docker Compose setup
+├── Containerfile         # Podman container configuration
+├── podman-compose.yml    # Podman Compose setup
 ├── env.example           # Environment template
 └── README.md             # This file
 ```

@@ -1,5 +1,5 @@
 # CPU-optimized version for production deployment
-FROM tensorflow/tensorflow:2.13.0
+FROM docker.io/library/tensorflow/tensorflow:2.13.0
 
 # Set working directory
 WORKDIR /app
